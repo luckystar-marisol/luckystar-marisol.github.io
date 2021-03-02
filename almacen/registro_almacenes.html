@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Control de Inventario</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+</head>
+
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="index.html" class="nav-link">Inicio</a>
+                </li>
+            </ul>
+
+        </nav>
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="index.html" class="brand-link">
+                <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+                    style="opacity: .8">
+                <span class="brand-text font-weight-light">Sistema Inventario</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+                   with font-awesome or any other icon font library -->
+                        <li class="nav-header">REGISTROS</li>
+                        <li class="nav-item">
+                            <a href="en_tiempo_real.html" class="nav-link">
+                                <i class="nav-icon fas fa-columns"></i>
+                                <p>
+                                    En tiempo real
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="registro_actividad.html" class="nav-link">
+                                <i class="nav-icon fas fa-columns"></i>
+                                <p>
+                                    Registro de actividades
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-header">OPERACIONES</li>
+                        <li class="nav-item">
+                            <a href="agregar_almacen.html" class="nav-link">
+                                <i class="nav-icon fas fa-user-plus"></i>
+                                <p>
+                                    Registar/Agregar stock
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="modificar_almacen.html" class="nav-link">
+                                <i class="nav-icon fas fa-users-cog"></i>
+                                <p>
+                                    Modificar stock
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="restar_almacen.html" class="nav-link">
+                                <i class="nav-icon fas fa-users-cog"></i>
+                                <p>
+                                    Transferir stock
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-header">OTROS</li>
+                        <li class="nav-item">
+                            <a href="registro_almacenes.html" class="nav-link">
+                                <i class="nav-icon fas fa-user-plus"></i>
+                                <p>
+                                    Registro de Almacenes
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="registro_clientes.html" class="nav-link">
+                                <i class="nav-icon fas fa-user-plus"></i>
+                                <p>
+                                    Registro de Clientes
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="registro_almacenes.html" class="nav-link">
+                                <i class="nav-icon fas fa-user-plus"></i>
+                                <p>
+                                    Registro de Almacenes
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-header">MISCELLANEOUS</li>
+                        <li class="nav-item">
+                            <a href="logout.php" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>
+                                    Salir
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- /.Main Sidebar Container -->
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Registro de Almacenes</h1>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
+
+            <!-- Main content -->
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <!-- <div id="result"></div> -->
+                                    <table id="tabla_contactos" class="table table-bordered table-striped"></table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- left column -->
+                        <div class="col-md-6">
+                            <!-- general form elements -->
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Información del Almacen</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control form-control-border border-width-2"
+                                            id="nombre" placeholder="NOMBRE">
+                                        </br>
+                                        <input type="text" class="form-control form-control-border border-width-2"
+                                            id="comentarios" placeholder="COMENTARIOS">
+                                        </br>
+                                        <button type="submit" id="guardar" class="btn btn-primary">Guardar</button>
+                                        <button type="submit" id="limpiar" class="btn btn-primary">Limpiar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 3.1.0-rc
+            </div>
+        </footer>
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- REQUIRED SCRIPTS -->
+
+    <!-- jQuery -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- ChartJS -->
+    <script src="plugins/chart.js/Chart.min.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+    <!-- daterangepicker -->
+    <script src="plugins/moment/moment.min.js"></script>
+    <script src="plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Summernote -->
+    <script src="plugins/summernote/summernote-bs4.min.js"></script>
+    <!-- overlayScrollbars -->
+    <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="dist/js/adminlte.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="dist/js/demo.js"></script>
+
+    <!-- DataTables  & Plugins -->
+    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="plugins/jszip/jszip.min.js"></script>
+    <script src="plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- Page specific script -->
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="plugins/firebase/firebase-app.js"></script>
+    <script src="plugins/firebase/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-analytics.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyB55bPsfY7dmf3EClICcABDdXqBxruCrRM",
+            authDomain: "sistema-inventario-fdbb5.firebaseapp.com",
+            databaseURL: "https://sistema-inventario-fdbb5-default-rtdb.firebaseio.com",
+            projectId: "sistema-inventario-fdbb5",
+            storageBucket: "sistema-inventario-fdbb5.appspot.com",
+            messagingSenderId: "531659407989",
+            appId: "1:531659407989:web:83427504a94d3419882e3c",
+            measurementId: "G-B69LNRBX7K"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            var guardar = true;
+            var almacenTempId;
+
+            const nombre = document.getElementById('nombre');
+            const comentarios = document.getElementById('comentarios');
+            const addBtn = document.getElementById('guardar');
+            const cleanBtn = document.getElementById('limpiar');
+
+            let db = firebase.firestore();
+
+            const inventarioCollection = db.collection('inventario');
+            const almacenCollection = db.collection('almacen');
+
+            if (typeof almacenId !== 'undefined') {
+                var docRef = inventarioCollection.doc(get('id'));
+
+                docRef.get().then((doc) => {
+                    if (doc.exists) {
+                        console.log("Document data:", doc.data());
+                        codigo.value = doc.data().codigo;
+                        codigo.readOnly = true;
+                        nombre.value = doc.data().nombre;
+                        nombre.readOnly = true;
+                        almacen.value = doc.data().almacen;
+                        almacen.readOnly = true;
+                        cantidadOld = Number(doc.data().cantidad);
+                        comentarios.value = doc.data().comentarios;
+                        addBtn.firstChild.data = "Actualizar";
+                        // window.alert("El almacen se encontro con éxito.");
+                    } else {
+                        // doc.data() will be undefined in this case
+                        console.log("No such document!");
+                        window.alert("Almacen no encontrado.");
+                    }
+                }).catch((error) => {
+                    console.log("Error getting document:", error);
+                });
+            }
+
+            addBtn.addEventListener('click', e => {
+                e.preventDefault();
+                if (guardar) {
+                    almacenCollection.add({
+                        nombre: nombre.value,
+                        comentarios: comentarios.value,
+                        empresa_id: 1,
+                        estado: "ACTIVO"
+                    }).then((docRef) => {
+                        console.log("Document written with ID: ", docRef.id);
+                        window.alert("El almacen se registro/agrego con éxito.");
+                        nombre.value = "";
+                        comentarios.value = "";
+                    }).catch((error) => {
+                        console.error("Error adding document: ", error);
+                        window.alert("Hubo un error al registrar/agregar el almacen.");
+                    });
+                }
+                else {
+                    almacenCollection.doc(almacenTempId).update({
+                        nombre: nombre.value,
+                        comentarios: comentarios.value,
+                    }).then((docRef) => {
+                        window.alert("El almacen se actualizo con éxito.");
+                        nombre.value = "";
+                        comentarios.value = "";
+                    }).catch((error) => {
+                        console.error("Error adding document: ", error);
+                        window.alert("Hubo un error al actualizar el almacen.");
+                    });
+                    guardar = true;
+                    addBtn.firstChild.data = "Guardar";
+                }
+            });
+
+            cleanBtn.addEventListener('click', e => {
+                e.preventDefault();
+                console.log("?");
+                nombre.value = "";
+                comentarios.value = "";
+            });
+
+            almacenCollection.where("empresa_id", "==", 1).onSnapshot((querySnapshot) => {
+                var dataSet = new Array();
+                querySnapshot.forEach((doc) => {
+                    // console.log(doc.id);
+                    // console.log(doc.data());
+                    var query = "";
+                    query += "id=" + doc.id
+                    dataSet.push([
+                        doc.id,
+                        doc.data().nombre,
+                        doc.data().comentarios,
+                        doc.data().estado,
+                        '<a href="#" class="modificar" id="modificar.' + doc.id + '"> Modificar </a>|<a href="#" class="eliminar" id="eliminar.' + doc.id + '"> Dar de baja</a>|<a href="#" class="activar" id="activar.' + doc.id + '"> Activar</a>']);
+                });
+
+                table = $("#tabla_contactos").DataTable({
+                    destroy: true,
+                    data: dataSet,
+                    columns: [
+                        { title: "id" },
+                        { title: "Nombre" },
+                        { title: "Comentarios" },
+                        { title: "Estado" },
+                        { title: "Opciones" }
+                    ],
+                    "columnDefs": [
+                        {
+                            "targets": [0],
+                            "visible": false,
+                            "searchable": false
+                        }
+                    ],
+                    "responsive": true,
+                    "lengthChange": false,
+                    "autoWidth": false,
+                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                }).buttons().container().appendTo('#tabla_contactos_wrapper .col-md-6:eq(0)');
+
+                var modificarList = document.getElementsByClassName('modificar');
+                var modificarIdArr = new Array;
+                var modificarArr = new Array;
+
+                for (var el of modificarList) {
+                    var _id = el.id;
+                    modificarIdArr.push(_id.split(".")[1]);
+                    modificarArr.push(document.getElementById(_id));
+                }
+                
+                for (var i = 0; i < modificarArr.length; i++) {
+                    modificarArr[i].addEventListener("click", modificarClick(i));
+                }
+
+                function modificarClick(i) {
+                    return function () {
+                        guardar = false;
+                        addBtn.firstChild.data = "Actualizar";
+                        almacenTempId = modificarIdArr[i];
+                        var docRef = almacenCollection.doc(modificarIdArr[i]);
+
+                        docRef.get().then((doc) => {
+                            if (doc.exists) {
+                                console.log("Document data:", doc.data());
+                                nombre.value = doc.data().nombre;
+                                comentarios.value = doc.data().comentarios;
+                            } else {
+                                console.log("No such document!");
+                                window.alert("Almacen no encontrado.");
+                            }
+                        }).catch((error) => {
+                            console.log("Error getting document:", error);
+                        });
+                    };
+                }
+
+
+                var eliminarList = document.getElementsByClassName('eliminar');
+                var eliminarIdArr = new Array;
+                var eliminarArr = new Array;
+
+                for (var el of eliminarList) {
+                    var _id = el.id;
+                    eliminarIdArr.push(_id.split(".")[1]);
+                    eliminarArr.push(document.getElementById(_id));
+                }
+                
+                for (var i = 0; i < eliminarArr.length; i++) {
+                    eliminarArr[i].addEventListener("click", eliminarClick(i));
+                }
+
+                function eliminarClick(i) {
+                    return function () {
+                        console.log("?");
+                        var docRef = almacenCollection.doc(eliminarIdArr[i]);
+
+                        docRef.update({
+                            estado: "DADO DE BAJA",
+                        }).then((docRef) => {
+                            window.alert("El almacen se actualizo con éxito.");
+                        }).catch((error) => {
+                            console.error("Error adding document: ", error);
+                            window.alert("Hubo un error al actualizar el almacen.");
+                        });
+                    };
+                }
+
+
+                var activarList = document.getElementsByClassName('activar');
+                var activarIdArr = new Array;
+                var activarArr = new Array;
+
+                for (var el of activarList) {
+                    var _id = el.id;
+                    activarIdArr.push(_id.split(".")[1]);
+                    activarArr.push(document.getElementById(_id));
+                }
+                
+                for (var i = 0; i < activarArr.length; i++) {
+                    activarArr[i].addEventListener("click", activarClick(i));
+                }
+
+                function activarClick(i) {
+                    return function () {
+                        console.log("?");
+                        var docRef = almacenCollection.doc(activarIdArr[i]);
+
+                        docRef.update({
+                            estado: "ACTIVO",
+                        }).then((docRef) => {
+                            window.alert("El almacen se actualizo con éxito.");
+                        }).catch((error) => {
+                            console.error("Error adding document: ", error);
+                            window.alert("Hubo un error al actualizar el almacen.");
+                        });
+                    };
+                }
+            });
+        });
+    </script>
+</body>
+
+
+</html>
