@@ -345,7 +345,7 @@
                 e.preventDefault();
                 if (guardar) {
                     almacenCollection.add({
-                        nombre: nombre.value,
+                        nombre: nombre.value.replace(/ /g,''),
                         comentarios: comentarios.value,
                         empresa_id: 1,
                         estado: "ACTIVO"
@@ -361,7 +361,7 @@
                 }
                 else {
                     almacenCollection.doc(almacenTempId).update({
-                        nombre: nombre.value,
+                        nombre: nombre.value.replace(/ /g,''),
                         comentarios: comentarios.value,
                     }).then((docRef) => {
                         window.alert("El almacen se actualizo con éxito.");

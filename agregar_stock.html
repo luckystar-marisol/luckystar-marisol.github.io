@@ -184,12 +184,10 @@
                                 <!-- /.card-header -->
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label for="codigo">Código</label>
-                                        <input type="text" class="form-control " id="codigo">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="nombre">Nombre</label>
-                                        <input type="text" class="form-control" id="nombre">
+                                        <label for="almacen">Almacen</label>
+                                        <select class="form-control almacen" id="almacen" style="width: 100%;">
+                                            <option selected="selected">-</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="proveedor">Proveedor</label>
@@ -198,14 +196,26 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="almacen">Almacen</label>
-                                        <select class="form-control almacen" id="almacen" style="width: 100%;">
+                                        <label for="codigo">Código</label>
+                                        <select class="form-control codigo" id="codigo" style="width: 100%;">
                                             <option selected="selected">-</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="cantidad">Cantidad</label>
-                                        <input type="number" class="form-control" id="cantidad" min="1" step="1">
+                                        <label for="nombre">Nombre</label>
+                                        <input type="text" class="form-control" id="nombre">
+                                    </div>
+                                    <div class="form-group" id="cantidad_actual_div">
+                                        <label for="cantidad_actual">Cantidad Actual</label>
+                                        <input type="number" class="form-control" id="cantidad_actual" min="1" step="1">
+                                    </div>
+                                    <div class="form-group" id="cantidad_nueva_div">
+                                        <label for="cantidad_nueva">Cantidad Nueva</label>
+                                        <input type="number" class="form-control" id="cantidad_nueva" min="1" step="1">
+                                    </div>
+                                    <div class="form-group" id="cantidad_total_div">
+                                        <label for="cantidad_total">Cantidad Total</label>
+                                        <input type="number" class="form-control" id="cantidad_total" min="1" step="1">
                                     </div>
                                     <div class="form-group">
                                         <label for="comentarios">Comentarios</label>
@@ -325,6 +335,26 @@
     </script>
 
     <script>
+        function hide(elements) {
+            elements = elements.length ? elements : [elements];
+            for (var index = 0; index < elements.length; index++) {
+                elements[index].style.display = 'none';
+            }
+        }
+
+        function show(elements, specifiedDisplay) {
+            var computedDisplay, element, index;
+            elements = elements.length ? elements : [elements];
+            for (index = 0; index < elements.length; index++) {
+                element = elements[index];
+                element.style.display = '';
+                computedDisplay = window.getComputedStyle(element, null).getPropertyValue('display');
+                if (computedDisplay === 'none') {
+                    element.style.display = specifiedDisplay || 'block';
+                }
+            }
+        }
+
         function get(name) {
             if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
                 return decodeURIComponent(name[1]);
@@ -339,26 +369,66 @@
                 }
             }
         }
+    </script>
+
+    <script>
+
+        var almacenTemp = "";
+        var proveedorTemp = "";
+        var codigoTemp = "";
+        var idTemp = "";
 
         var productoId = get("id");
         var cantidadOld = 0;
 
-        const codigo = document.getElementById('codigo');
-        const nombre = document.getElementById('nombre');
         const almacen = document.getElementById('almacen');
         const proveedor = document.getElementById('proveedor');
-        const cantidad = document.getElementById('cantidad');
+        const codigo = document.getElementById('codigo');
+        const nombre = document.getElementById('nombre');
+        const cantidad_actual = document.getElementById('cantidad_actual');
+        const cantidad_nueva = document.getElementById('cantidad_nueva');
+        const cantidad_total = document.getElementById('cantidad_total');
         const comentarios = document.getElementById('comentarios');
         const addBtn = document.getElementById('guardar');
 
+        const cantidad_actual_div = document.getElementById('cantidad_actual_div');
+        const cantidad_nueva_div = document.getElementById('cantidad_nueva_div');
+        const cantidad_total_div = document.getElementById('cantidad_total_div');
+
+        const almacen_selector = $('.almacen');
+        const proveedor_selector = $('.proveedor');
+        const codigo_selector = $('.codigo');
+
+        nombre.readOnly = true;
+        cantidad_actual.readOnly = true;
+
+        hide(cantidad_actual_div);
+        hide(cantidad_total_div);
+
         let db = firebase.firestore();
+
         const inventarioCollection = db.collection('inventario');
+        const productoCollection = db.collection('producto');
         const almacenCollection = db.collection('almacen');
         const proveedorCollection = db.collection('proveedor');
 
 
-        almacenCollection.where("empresa_id", "==", 1).where("estado", "==", "ACTIVO").onSnapshot((querySnapshot) => {
+        productoCollection.where("empresa_id", "==", 1).where("estado", "==", "ACTIVO").onSnapshot((querySnapshot) => {
+            var dataSet = new Array();
+            var k = 1;
+            querySnapshot.forEach((doc) => {
+                console.log(doc.data().codigo + ".");
+                dataSet.push({ id: k, text: doc.data().codigo });
+                k++;
+            });
 
+            $('.codigo').select2({
+                data: dataSet,
+                theme: 'bootstrap4'
+            });
+        });
+
+        almacenCollection.where("empresa_id", "==", 1).where("estado", "==", "ACTIVO").onSnapshot((querySnapshot) => {
             var dataSet = new Array();
             var k = 1;
             querySnapshot.forEach((doc) => {
@@ -373,7 +443,6 @@
         });
 
         proveedorCollection.where("empresa_id", "==", 1).where("estado", "==", "ACTIVO").onSnapshot((querySnapshot) => {
-
             var dataSet = new Array();
             var k = 1;
             querySnapshot.forEach((doc) => {
@@ -413,14 +482,115 @@
                 console.log("Error getting document:", error);
             });
         }
+    </script>
+    <script>
+
+        almacen_selector.on('select2:select', function (e) {
+            almacenTemp = almacen_selector.select2('data')[0].text;
+
+            idTemp = ""
+            cantidad_actual.value = "";
+            hide(cantidad_actual_div);
+            hide(cantidad_total_div);
+            cantidad_total.value = cantidad_nueva.value;
+
+            inventarioCollection.where("almacen", "==", almacenTemp).where("codigo", "==", codigoTemp)
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        idTemp = doc.id;
+                        codigoTemp = doc.data().codigo;
+                        nombre.value = doc.data().nombre;
+                        show(cantidad_actual_div);
+                        show(cantidad_total_div);
+                        cantidad_actual.value = doc.data().cantidad;
+                        if (cantidad_nueva.value.length > 0) {
+                            cantidad_total.value = parseInt(cantidad_actual.value, 10) + parseInt(cantidad_nueva.value, 10);
+                        }
+                        else {
+                            cantidad_total.value = doc.data().cantidad;
+                        }
+                    });
+                })
+                .catch((error) => {
+                    console.log("Error getting documents: ", error);
+                });
+        });
+
+        proveedor_selector.on('select2:select', function (e) {
+            proveedorTemp = proveedor_selector.select2('data')[0].text;
+        });
+
+        codigo_selector.on('select2:select', function (e) {
+            codigoTemp = codigo_selector.select2('data')[0].text;
+
+            idTemp = ""
+            codigo.data = "";
+            cantidad_actual.value = "";
+            hide(cantidad_actual_div);
+            hide(cantidad_total_div);
+            cantidad_total.value = cantidad_nueva.value;
+
+            console.log(codigoTemp + ".");
+
+            productoCollection.where("codigo", "==", codigoTemp)
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        nombre.value = doc.data().nombre;
+                    });
+                })
+                .catch((error) => {
+                    console.log("Error getting documents: ", error);
+                });
+            console.log(almacenTemp);
+            console.log(codigoTemp);
+            inventarioCollection.where("almacen", "==", almacenTemp).where("codigo", "==", codigoTemp)
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        console.log(doc.data());
+                        idTemp = doc.id;
+                        codigoTemp = doc.data().codigo;
+                        nombre.value = doc.data().nombre;
+                        show(cantidad_actual_div);
+                        show(cantidad_total_div);
+                        cantidad_actual.value = doc.data().cantidad;
+                        if (cantidad_nueva.value.length > 0) {
+                            cantidad_total.value = parseInt(cantidad_actual.value, 10) + parseInt(cantidad_nueva.value, 10);
+                        }
+                        else {
+                            cantidad_total.value = doc.data().cantidad;
+                        }
+                    });
+                })
+                .catch((error) => {
+                    console.log("Error getting documents: ", error);
+                });
+        });
+
+
+
+        $("#cantidad_nueva").on("keyup", function () {
+            if (cantidad_nueva.value.length > 0) {
+                if (cantidad_actual.value.length > 0) {
+                    cantidad_total.value = parseInt(cantidad_actual.value, 10) + parseInt(cantidad_nueva.value, 10);
+                }
+                else {
+                    cantidad_total.value = cantidad_nueva.value;
+                }
+            }
+            else {
+                cantidad_total.value = 0;
+            }
+        });
 
         addBtn.addEventListener('click', e => {
             e.preventDefault();
-            var cantidadNew = Number(cantidad.value);
-            if (typeof productoId !== 'undefined') {
-                cantidadNew += cantidadOld;
-                inventarioCollection.doc(productoId).update({
-                    cantidad: cantidadNew,
+            if (idTemp.length > 0) {
+                inventarioCollection.doc(idTemp).update({
+                    proveedor: proveedor.options[proveedor.selectedIndex].text,
+                    cantidad: cantidad_total.value,
                     comentarios: comentarios.value
                 }).then((docRef) => {
                     window.alert("El producto se actualizo con éxito.");
@@ -432,11 +602,11 @@
             }
             else {
                 inventarioCollection.add({
-                    codigo: codigo.value,
-                    nombre: nombre.value,
-                    proveedor: proveedor.options[proveedor.selectedIndex].text,
                     almacen: almacen.options[almacen.selectedIndex].text,
-                    cantidad: cantidadNew,
+                    proveedor: proveedor.options[proveedor.selectedIndex].text,
+                    codigo: codigo.options[codigo.selectedIndex].text,
+                    nombre: nombre.value,
+                    cantidad: cantidad_nueva.value,
                     comentarios: comentarios.value,
                     empresa_id: 1
                 }).then((docRef) => {

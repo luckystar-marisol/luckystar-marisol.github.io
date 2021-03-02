@@ -120,10 +120,10 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="registro_Productoes.html" class="nav-link">
+                            <a href="registro_proveedores.html" class="nav-link">
                                 <i class="nav-icon fas fa-user-plus"></i>
                                 <p>
-                                    Registro de Productoes
+                                    Registro de Proveedores
                                 </p>
                             </a>
                         </li>
@@ -345,7 +345,7 @@
                 e.preventDefault();
                 if (guardar) {
                     productoCollection.add({
-                        codigo: codigo.value,
+                        codigo: codigo.value.replace(/ /g,'_'),
                         nombre: nombre.value,
                         empresa_id: 1,
                         estado: "ACTIVO"
@@ -361,7 +361,7 @@
                 }
                 else {
                     productoCollection.doc(productoTempId).update({
-                        codigo: codigo.value,
+                        codigo: codigo.value.replace(/ /g,'_'),
                         nombre: nombre.value,
                     }).then((docRef) => {
                         window.alert("El producto se actualizo con éxito.");

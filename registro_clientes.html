@@ -345,7 +345,7 @@
                 e.preventDefault();
                 if (guardar) {
                     clienteCollection.add({
-                        nombre: nombre.value,
+                        nombre: nombre.value.replace(/ /g,'_'),
                         comentarios: comentarios.value,
                         empresa_id: 1,
                         estado: "ACTIVO"
@@ -361,7 +361,7 @@
                 }
                 else {
                     clienteCollection.doc(clienteTempId).update({
-                        nombre: nombre.value,
+                        nombre: nombre.value.replace(/ /g,'_'),
                         comentarios: comentarios.value,
                     }).then((docRef) => {
                         window.alert("El cliente se actualizo con éxito.");
