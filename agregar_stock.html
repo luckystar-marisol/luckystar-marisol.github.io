@@ -25,12 +25,9 @@
     <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
     <!-- summernote -->
     <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
-
-    <!-- DataTables -->
-    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-
+    <!-- Select2 -->
+    <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -163,37 +160,80 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
-            <div class="content-header">
+            <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Registro en tiempo real</h1>
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
-            </div>
-            <!-- /.content-header -->
-
-            <!-- Main content -->
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <!-- /.card-header -->
-                                <div class="card-body">
-                                    <!-- <div id="result"></div> -->
-                                    <table id="tabla_contactos" class="table table-bordered table-striped"></table>
-                                </div>
-                                <!-- /.card-body -->
-                            </div>
-                            <!-- /.card -->
+                        <div class="col-sm-12">
+                            <h1>Registar o agregar el stock un producto</h1>
                         </div>
                     </div>
-                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- left column -->
+                        <div class="col-md-6">
+                            <!-- general form elements -->
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Información del Producto</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="codigo">Código</label>
+                                        <input type="text" class="form-control " id="codigo">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nombre">Nombre</label>
+                                        <input type="text" class="form-control" id="nombre">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="proveedor">Proveedor</label>
+                                        <select class="form-control proveedor" id="proveedor" style="width: 100%;">
+                                            <option selected="selected">-</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="almacen">Almacen</label>
+                                        <select class="form-control almacen" id="almacen" style="width: 100%;">
+                                            <option selected="selected">-</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cantidad">Cantidad</label>
+                                        <input type="number" class="form-control" id="cantidad" min="1" step="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="comentarios">Comentarios</label>
+                                        <input type="text" class="form-control" id="comentarios">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputFile">Imagen</label>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="exampleInputFile">
+                                            <label class="custom-file-label" for="exampleInputFile">Foto del
+                                                Producto</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" id="guardar" class="btn btn-primary">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+
+                    </div>
+                    <!--/.col (left) -->
+
                 </div>
-                <!-- /.container-fluid -->
-            </div>
+                <!-- /.row -->
+            </section>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
@@ -285,63 +325,129 @@
     </script>
 
     <script>
-        $(document).ready(function () {
+        function get(name) {
+            if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
+                return decodeURIComponent(name[1]);
+        }
 
-            const editar = document.getElementById('editar');
+        function setSelectBoxByText(eid, etxt) {
+            for (var i = 0; i < eid.options.length; ++i) {
+                if (eid.options[i].text === etxt) {
+                    $('.almacen').val(i);
+                    $('.almacen').prop("disabled", true);
+                    $('.almacen').trigger('change');
+                }
+            }
+        }
 
-            let db = firebase.firestore();
+        var productoId = get("id");
+        var cantidadOld = 0;
 
-            db.collection("inventario").where("empresa_id", "==", 1).onSnapshot((querySnapshot) => {
+        const codigo = document.getElementById('codigo');
+        const nombre = document.getElementById('nombre');
+        const almacen = document.getElementById('almacen');
+        const proveedor = document.getElementById('proveedor');
+        const cantidad = document.getElementById('cantidad');
+        const comentarios = document.getElementById('comentarios');
+        const addBtn = document.getElementById('guardar');
 
-                var dataSet = new Array();
+        let db = firebase.firestore();
+        const inventarioCollection = db.collection('inventario');
+        const almacenCollection = db.collection('almacen');
+        const proveedorCollection = db.collection('proveedor');
 
-                var i = 1;
 
-                querySnapshot.forEach((doc) => {
-                    // console.log(doc.id);
-                    // console.log(doc.data());
-                    var query = "";
-                    query += "id=" + doc.id
-                    dataSet.push([
-                        doc.id,
-                        doc.data().codigo,
-                        doc.data().nombre,
-                        doc.data().proveedor,
-                        doc.data().almacen,
-                        doc.data().cantidad,
-                        doc.data().comentarios,
-                        '<a href="agregar_stock.html?' + query + '">Agregar </a>|<a href="modificar_producto.html?' + query + '"> Modificar </a>|<a href="restar_producto.html?' + query + '"> Transferir</a>']);
-                    i = i + 1;
-                });
+        almacenCollection.where("empresa_id", "==", 1).where("estado", "==", "ACTIVO").onSnapshot((querySnapshot) => {
 
-                console.log(dataSet);
-
-                table = $("#tabla_contactos").DataTable({
-                    destroy: true,
-                    data: dataSet,
-                    columns: [
-                        { title: "id" },
-                        { title: "Codigo" },
-                        { title: "Nombre" },
-                        { title: "Proveedor" },
-                        { title: "Almacen" },
-                        { title: "Cantidad" },
-                        { title: "Comentarios" },
-                        { title: "Opciones" }
-                    ],
-                    "columnDefs": [
-                        {
-                            "targets": [0],
-                            "visible": false,
-                            "searchable": false
-                        }
-                    ],
-                    "responsive": true,
-                    "lengthChange": false,
-                    "autoWidth": false,
-                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-                }).buttons().container().appendTo('#tabla_contactos_wrapper .col-md-6:eq(0)');
+            var dataSet = new Array();
+            var k = 1;
+            querySnapshot.forEach((doc) => {
+                dataSet.push({ id: k, text: doc.data().nombre });
+                k++;
             });
+
+            $('.almacen').select2({
+                data: dataSet,
+                theme: 'bootstrap4'
+            });
+        });
+
+        proveedorCollection.where("empresa_id", "==", 1).where("estado", "==", "ACTIVO").onSnapshot((querySnapshot) => {
+
+            var dataSet = new Array();
+            var k = 1;
+            querySnapshot.forEach((doc) => {
+                dataSet.push({ id: k, text: doc.data().nombre });
+                k++;
+            });
+
+            $('.proveedor').select2({
+                data: dataSet,
+                theme: 'bootstrap4'
+            });
+        });
+
+
+        if (typeof productoId !== 'undefined') {
+            var docRef = inventarioCollection.doc(get('id'));
+
+            docRef.get().then((doc) => {
+                if (doc.exists) {
+                    console.log("Document data:", doc.data());
+                    codigo.value = doc.data().codigo;
+                    codigo.readOnly = true;
+                    nombre.value = doc.data().nombre;
+                    nombre.readOnly = true;
+                    setSelectBoxByText(almacen, doc.data().almacen);
+                    almacen.readOnly = true;
+                    cantidadOld = Number(doc.data().cantidad);
+                    addBtn.firstChild.data = "Agregar";
+                    // window.alert("El producto se encontro con éxito.");
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                    window.alert("Producto no encontrado.");
+                }
+
+            }).catch((error) => {
+                console.log("Error getting document:", error);
+            });
+        }
+
+        addBtn.addEventListener('click', e => {
+            e.preventDefault();
+            var cantidadNew = Number(cantidad.value);
+            if (typeof productoId !== 'undefined') {
+                cantidadNew += cantidadOld;
+                inventarioCollection.doc(productoId).update({
+                    cantidad: cantidadNew,
+                    comentarios: comentarios.value
+                }).then((docRef) => {
+                    window.alert("El producto se actualizo con éxito.");
+                    location.reload();
+                }).catch((error) => {
+                    console.error("Error adding document: ", error);
+                    window.alert("Hubo un error al actualizar el producto.");
+                });
+            }
+            else {
+                inventarioCollection.add({
+                    codigo: codigo.value,
+                    nombre: nombre.value,
+                    proveedor: proveedor.options[proveedor.selectedIndex].text,
+                    almacen: almacen.options[almacen.selectedIndex].text,
+                    cantidad: cantidadNew,
+                    comentarios: comentarios.value,
+                    empresa_id: 1
+                }).then((docRef) => {
+                    console.log("Document written with ID: ", docRef.id);
+                    window.alert("El producto se registro/agrego con éxito.");
+                    location.reload();
+                }).catch((error) => {
+                    console.error("Error adding document: ", error);
+                    window.alert("Hubo un error al registrar/agregar el producto.");
+                });
+            }
         });
     </script>
 </body>

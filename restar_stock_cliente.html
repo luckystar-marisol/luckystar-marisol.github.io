@@ -25,9 +25,6 @@
     <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
     <!-- summernote -->
     <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
-    <!-- Select2 -->
-    <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
-    <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -47,6 +44,7 @@
         </nav>
         <!-- /.navbar -->
 
+        
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
@@ -84,7 +82,7 @@
                         </li>
                         <li class="nav-header">OPERACIONES</li>
                         <li class="nav-item">
-                            <a href="agregar_producto.html" class="nav-link">
+                            <a href="agregar_stock.html" class="nav-link">
                                 <i class="nav-icon fas fa-user-plus"></i>
                                 <p>
                                     Registar/Agregar stock
@@ -92,22 +90,30 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="modificar_producto.html" class="nav-link">
+                            <a href="resta_stock_cliente.html" class="nav-link">
                                 <i class="nav-icon fas fa-users-cog"></i>
                                 <p>
-                                    Modificar stock
+                                    Transferir stock a Cliente
                                 </p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="restar_producto.html" class="nav-link">
+                            <a href="resta_stock_almacen.html" class="nav-link">
                                 <i class="nav-icon fas fa-users-cog"></i>
                                 <p>
-                                    Transferir stock
+                                    Transferir stock a Almacen
                                 </p>
                             </a>
                         </li>
                         <li class="nav-header">OTROS</li>
+                        <li class="nav-item">
+                            <a href="registro_productos.html" class="nav-link">
+                                <i class="nav-icon fas fa-user-plus"></i>
+                                <p>
+                                    Registro de Productos
+                                </p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="registro_proveedores.html" class="nav-link">
                                 <i class="nav-icon fas fa-user-plus"></i>
@@ -149,6 +155,7 @@
         </aside>
         <!-- /.Main Sidebar Container -->
 
+
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -156,7 +163,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-12">
-                            <h1>Registar o agregar el stock un producto</h1>
+                            <h1>Transferencia o salida de el stock un producto</h1>
                         </div>
                     </div>
                 </div><!-- /.container-fluid -->
@@ -176,42 +183,29 @@
                                 <!-- /.card-header -->
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label for="codigo">Código</label>
-                                        <input type="text" class="form-control " id="codigo">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="nombre">Nombre</label>
-                                        <input type="text" class="form-control" id="nombre">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="proveedor">Proveedor</label>
-                                        <select class="form-control proveedor" id="proveedor" style="width: 100%;">
-                                            <option selected="selected">-</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="almacen">Almacen</label>
-                                        <select class="form-control almacen" id="almacen" style="width: 100%;">
-                                            <option selected="selected">-</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="cantidad">Cantidad</label>
-                                        <input type="number" class="form-control" id="cantidad" min="1" step="1">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="comentarios">Comentarios</label>
-                                        <input type="text" class="form-control" id="comentarios">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputFile">Imagen</label>
+                                        <input type="text" class="form-control form-control-border border-width-2"
+                                            id="codigo" placeholder="CODIGO">
+                                        </br>
+                                        <input type="text" class="form-control form-control-border border-width-2"
+                                            id="nombre" placeholder="NOMBRE">
+                                        </br>
+                                        <input type="text" class="form-control form-control-border border-width-2"
+                                            id="almacen" placeholder="ALMACEN">
+                                        </br>
+                                        <input type="number" class="form-control form-control-border border-width-2"
+                                            id="cantidad" placeholder="CANTIDAD" min="1" step="1">
+                                        </br>
+                                        <input type="text" class="form-control form-control-border border-width-2"
+                                            id="comentarios" placeholder="COMENTARIOS">
+                                        </br>
+                                        </br>
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" id="exampleInputFile">
                                             <label class="custom-file-label" for="exampleInputFile">Foto del
                                                 Producto</label>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
+                                        </br>
+                                        </br>
                                         <button type="submit" id="guardar" class="btn btn-primary">Guardar</button>
                                     </div>
                                 </div>
@@ -225,25 +219,26 @@
 
                 </div>
                 <!-- /.row -->
-            </section>
-            <!-- /.content -->
+        </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <footer class="main-footer">
+        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+        All rights reserved.
+        <div class="float-right d-none d-sm-inline-block">
+            <b>Version</b> 3.1.0-rc
         </div>
-        <!-- /.content-wrapper -->
-
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
-
-        <!-- Main Footer -->
-        <footer class="main-footer">
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-            All rights reserved.
-            <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 3.1.0-rc
-            </div>
-        </footer>
+    </footer>
     </div>
     <!-- ./wrapper -->
 
@@ -251,32 +246,26 @@
 
     <!-- jQuery -->
     <script src="plugins/jquery/jquery.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-    <script>
-        $.widget.bridge('uibutton', $.ui.button)
-    </script>
-    <!-- Bootstrap 4 -->
+    <!-- Bootstrap -->
     <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- ChartJS -->
-    <script src="plugins/chart.js/Chart.min.js"></script>
-    <!-- jQuery Knob Chart -->
-    <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-    <!-- daterangepicker -->
-    <script src="plugins/moment/moment.min.js"></script>
-    <script src="plugins/daterangepicker/daterangepicker.js"></script>
-    <!-- Tempusdominus Bootstrap 4 -->
-    <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-    <!-- Summernote -->
-    <script src="plugins/summernote/summernote-bs4.min.js"></script>
-    <!-- overlayScrollbars -->
-    <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-    <!-- AdminLTE App -->
+    <!-- AdminLTE -->
     <script src="dist/js/adminlte.js"></script>
+
+    <!-- OPTIONAL SCRIPTS -->
+    <script src="plugins/chart.js/Chart.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="dist/js/demo.js"></script>
+
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- DataTables  & Plugins -->
+
+    <!-- AdminLTE App -->
+    <script src="dist/js/adminlte.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="dist/js/demo.js"></script>
+    <!-- Page specific script -->
     <script src="plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
@@ -289,13 +278,11 @@
     <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <!-- Select2 -->
-    <script src="plugins/select2/js/select2.full.min.js"></script>
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="plugins/firebase/firebase-app.js"></script>
     <script src="plugins/firebase/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-analytics.js"></script>
+    <script src="plugins/firebase/firebase-analytics.js"></script>
 
     <script>
         // Your web app's Firebase configuration
@@ -322,63 +309,18 @@
                 return decodeURIComponent(name[1]);
         }
 
-        function setSelectBoxByText(eid, etxt) {
-            for (var i = 0; i < eid.options.length; ++i) {
-                if (eid.options[i].text === etxt) {
-                    $('.almacen').val(i);
-                    $('.almacen').prop("disabled", true);
-                    $('.almacen').trigger('change');
-                }
-            }
-        }
-
         var productoId = get("id");
-        var cantidadOld = 0;
+        var cantidadOld;
 
         const codigo = document.getElementById('codigo');
         const nombre = document.getElementById('nombre');
         const almacen = document.getElementById('almacen');
-        const proveedor = document.getElementById('proveedor');
         const cantidad = document.getElementById('cantidad');
         const comentarios = document.getElementById('comentarios');
         const addBtn = document.getElementById('guardar');
 
         let db = firebase.firestore();
         const inventarioCollection = db.collection('inventario');
-        const almacenCollection = db.collection('almacen');
-        const proveedorCollection = db.collection('proveedor');
-
-
-        almacenCollection.where("empresa_id", "==", 1).where("estado", "==", "ACTIVO").onSnapshot((querySnapshot) => {
-
-            var dataSet = new Array();
-            var k = 1;
-            querySnapshot.forEach((doc) => {
-                dataSet.push({ id: k, text: doc.data().nombre });
-                k++;
-            });
-
-            $('.almacen').select2({
-                data: dataSet,
-                theme: 'bootstrap4'
-            });
-        });
-
-        proveedorCollection.where("empresa_id", "==", 1).where("estado", "==", "ACTIVO").onSnapshot((querySnapshot) => {
-
-            var dataSet = new Array();
-            var k = 1;
-            querySnapshot.forEach((doc) => {
-                dataSet.push({ id: k, text: doc.data().nombre });
-                k++;
-            });
-
-            $('.proveedor').select2({
-                data: dataSet,
-                theme: 'bootstrap4'
-            });
-        });
-
 
         if (typeof productoId !== 'undefined') {
             var docRef = inventarioCollection.doc(get('id'));
@@ -390,17 +332,18 @@
                     codigo.readOnly = true;
                     nombre.value = doc.data().nombre;
                     nombre.readOnly = true;
-                    setSelectBoxByText(almacen, doc.data().almacen);
+                    almacen.value = doc.data().almacen;
                     almacen.readOnly = true;
                     cantidadOld = Number(doc.data().cantidad);
-                    addBtn.firstChild.data = "Agregar";
+                    cantidad.placeholder = "CANTIDAD (MAXIMO " + cantidadOld + ")";
+                    comentarios.value = doc.data().comentarios;
+                    addBtn.firstChild.data = "Actualizar";
                     // window.alert("El producto se encontro con éxito.");
                 } else {
                     // doc.data() will be undefined in this case
                     console.log("No such document!");
                     window.alert("Producto no encontrado.");
                 }
-
             }).catch((error) => {
                 console.log("Error getting document:", error);
             });
@@ -410,31 +353,48 @@
             e.preventDefault();
             var cantidadNew = Number(cantidad.value);
             if (typeof productoId !== 'undefined') {
-                cantidadNew += cantidadOld;
-                inventarioCollection.doc(productoId).update({
-                    cantidad: cantidadNew,
-                    comentarios: comentarios.value
-                }).then((docRef) => {
-                    window.alert("El producto se actualizo con éxito.");
-                    location.reload();
-                }).catch((error) => {
-                    console.error("Error adding document: ", error);
-                    window.alert("Hubo un error al actualizar el producto.");
-                });
+                if (cantidadNew > cantidadOld) {
+
+                } else {
+                    cantidadOld -= cantidadNew;
+                    inventarioCollection.doc(productoId).update({
+                        codigo: codigo.value,
+                        nombre: nombre.value,
+                        almacen: almacen.value,
+                        cantidad: cantidadOld,
+                        comentarios: comentarios.value,
+                        empresa_id: 1
+                    }).then((docRef) => {
+                        window.alert("El producto se actualizo con éxito.");
+                        codigo.innerHTML = "";
+                        nombre.innerHTML = "";
+                        almacen.innerHTML = "";
+                        cantidad.innerHTML = "";
+                        comentarios.innerHTML = "";
+                    }).catch((error) => {
+                        console.error("Error adding document: ", error);
+                        window.alert("Hubo un error al actualizar el producto.");
+                    });
+
+                }
+
             }
             else {
                 inventarioCollection.add({
                     codigo: codigo.value,
                     nombre: nombre.value,
-                    proveedor: proveedor.options[proveedor.selectedIndex].text,
-                    almacen: almacen.options[almacen.selectedIndex].text,
+                    almacen: almacen.value,
                     cantidad: cantidadNew,
                     comentarios: comentarios.value,
                     empresa_id: 1
                 }).then((docRef) => {
                     console.log("Document written with ID: ", docRef.id);
                     window.alert("El producto se registro/agrego con éxito.");
-                    location.reload();
+                    codigo.innerHTML = "";
+                    nombre.innerHTML = "";
+                    almacen.innerHTML = "";
+                    cantidad.innerHTML = "";
+                    comentarios.innerHTML = "";
                 }).catch((error) => {
                     console.error("Error adding document: ", error);
                     window.alert("Hubo un error al registrar/agregar el producto.");
