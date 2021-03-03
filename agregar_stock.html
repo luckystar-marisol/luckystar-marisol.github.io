@@ -75,10 +75,18 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="registro_actividad.html" class="nav-link">
+                            <a href="registro_entradas.html" class="nav-link">
                                 <i class="nav-icon fas fa-columns"></i>
                                 <p>
-                                    Registro de actividades
+                                    Registro de entradas
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="registro_salidas.html" class="nav-link">
+                                <i class="nav-icon fas fa-columns"></i>
+                                <p>
+                                    Registro de salidas
                                 </p>
                             </a>
                         </li>
@@ -91,22 +99,22 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="resta_stock_cliente.html" class="nav-link">
+                        <!-- <li class="nav-item">
+                            <a href="restar_stock_cliente.html" class="nav-link">
                                 <i class="nav-icon fas fa-users-cog"></i>
                                 <p>
-                                    Transferir stock a Cliente
+                                    Transferir stock a cliente
                                 </p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="resta_stock_almacen.html" class="nav-link">
+                            <a href="restar_stock_almacen.html" class="nav-link">
                                 <i class="nav-icon fas fa-users-cog"></i>
                                 <p>
-                                    Transferir stock a Almacen
+                                    Transferir stock a almacen
                                 </p>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="nav-header">OTROS</li>
                         <li class="nav-item">
                             <a href="registro_productos.html" class="nav-link">
@@ -140,7 +148,7 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-header">MISCELLANEOUS</li>
+                        <!-- <li class="nav-header">MISCELLANEOUS</li>
                         <li class="nav-item">
                             <a href="logout.php" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
@@ -148,7 +156,7 @@
                                     Salir
                                 </p>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -411,6 +419,7 @@
         const productoCollection = db.collection('producto');
         const almacenCollection = db.collection('almacen');
         const proveedorCollection = db.collection('proveedor');
+        const entradasCollection = db.collection('entradas');
 
 
         productoCollection.where("empresa_id", "==", 1).where("estado", "==", "ACTIVO").onSnapshot((querySnapshot) => {
@@ -422,7 +431,7 @@
                 k++;
             });
 
-            $('.codigo').select2({
+            codigo_selector.select2({
                 data: dataSet,
                 theme: 'bootstrap4'
             });
@@ -436,7 +445,7 @@
                 k++;
             });
 
-            $('.almacen').select2({
+            almacen_selector.select2({
                 data: dataSet,
                 theme: 'bootstrap4'
             });
@@ -450,7 +459,7 @@
                 k++;
             });
 
-            $('.proveedor').select2({
+            proveedor_selector.select2({
                 data: dataSet,
                 theme: 'bootstrap4'
             });
@@ -593,8 +602,24 @@
                     cantidad: cantidad_total.value,
                     comentarios: comentarios.value
                 }).then((docRef) => {
-                    window.alert("El producto se actualizo con éxito.");
-                    location.reload();
+                    entradasCollection.add({
+                        almacen: almacen.options[almacen.selectedIndex].text,
+                        proveedor: proveedor.options[proveedor.selectedIndex].text,
+                        codigo: codigo.options[codigo.selectedIndex].text,
+                        nombre: nombre.value,
+                        operacion: "ENTRADA",
+                        cantidad: cantidad_nueva.value,
+                        comentarios: comentarios.value,
+                        empresa_id: 1,
+                        fecha: firebase.firestore.Timestamp.now()
+                    }).then((docRef) => {
+                        console.log("Document written with ID: ", docRef.id);
+                        window.alert("El producto se actualizo con éxito.");
+                        location.reload();
+                    }).catch((error) => {
+                        console.error("Error adding document: ", error);
+                        window.alert("Hubo un error al registrar/agregar el producto.");
+                    });
                 }).catch((error) => {
                     console.error("Error adding document: ", error);
                     window.alert("Hubo un error al actualizar el producto.");
@@ -610,9 +635,24 @@
                     comentarios: comentarios.value,
                     empresa_id: 1
                 }).then((docRef) => {
-                    console.log("Document written with ID: ", docRef.id);
-                    window.alert("El producto se registro/agrego con éxito.");
-                    location.reload();
+                    entradasCollection.add({
+                        almacen: almacen.options[almacen.selectedIndex].text,
+                        proveedor: proveedor.options[proveedor.selectedIndex].text,
+                        codigo: codigo.options[codigo.selectedIndex].text,
+                        nombre: nombre.value,
+                        operacion: "ENTRADA",
+                        cantidad: cantidad_nueva.value,
+                        comentarios: comentarios.value,
+                        empresa_id: 1,
+                        fecha: firebase.firestore.Timestamp.now()
+                    }).then((docRef) => {
+                        console.log("Document written with ID: ", docRef.id);
+                        window.alert("El producto se actualizo con éxito.");
+                        location.reload();
+                    }).catch((error) => {
+                        console.error("Error adding document: ", error);
+                        window.alert("Hubo un error al registrar/agregar el producto.");
+                    });
                 }).catch((error) => {
                     console.error("Error adding document: ", error);
                     window.alert("Hubo un error al registrar/agregar el producto.");
